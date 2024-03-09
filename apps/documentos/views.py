@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from django.views.generic import CreateView
 
-# Create your views here.
+from apps.documentos.models import Documento
+
+
+class DocumentoCreate(CreateView):
+    model = Documento
+    fields = ['descricao', 'documento']
