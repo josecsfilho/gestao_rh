@@ -1,6 +1,6 @@
 from django.views.generic import CreateView
 
-from apps.documentos.models import Documento
+from .models import Documento
 
 
 class DocumentoCreate(CreateView):
@@ -9,7 +9,9 @@ class DocumentoCreate(CreateView):
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
-        form.instance.percente_id = self.kwargs['funcionario_id']
+        form.instance.pertence_id = self.kwargs['funcionario_id']
+
+        # form.instance.percente_id = self.kwargs['funcionario_id']
 
         if form.is_valid():
             return self.form_valid(form)
