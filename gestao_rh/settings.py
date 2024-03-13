@@ -126,7 +126,6 @@ if not os.path.exists(MEDIA_ROOT):  # Condição inserida para criar DIR "media"
     os.makedirs(MEDIA_ROOT)
 
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
