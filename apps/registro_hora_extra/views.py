@@ -20,7 +20,7 @@ class HoraExtraEdit(UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super(HoraExtraEdit, self).get_form_kwargs()
-        kwargs.update({'user': self.user})
+        kwargs.update({'user': self.request.user})
         return kwargs
 
 
@@ -35,5 +35,5 @@ class HoraExtraNovo(CreateView):
 
     def get_form_kwargs(self):
         kwargs = super(HoraExtraNovo, self).get_form_kwargs()
-        kwargs.update({'user': self.user})
+        kwargs.update({'user': self.request.user})
         return kwargs
