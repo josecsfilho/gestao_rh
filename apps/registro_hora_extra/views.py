@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy
-
+from django.views import View
 
 from .models import RegistroHoraExtra
 from .forms import RegistroHoraExtraForm
@@ -37,3 +37,12 @@ class HoraExtraNovo(CreateView):
         kwargs = super(HoraExtraNovo, self).get_form_kwargs()
         kwargs.update({'user': self.request.user})
         return kwargs
+
+
+class UtilizouHoraExtra(View):
+    def post(self, pk):
+        pass
+
+
+class HoraExtraEditBase(View):
+        pass

@@ -14,11 +14,12 @@
     <a href="{% url 'delete_hora_extra' object.id %}" class="btn btn-danger">
             Deletar
     </a>
+
+    <button onclick="utilizouHoraExtra({{ object.id }})" class="btn btn-info" type="button">Marcar como utilizado</button>
     {% endif %}
 </form>
 
-<button onclick="teste()">Testar</button>
-<br>
+
 
 {% endblock %}
     {% block static %}
