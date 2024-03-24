@@ -1,9 +1,14 @@
+import io
+
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, UpdateView, DeleteView, CreateView
 from .models import Funcionario
+
+from django.template.loader import get_template
+import xhtml2pdf.pisa as pisa
 
 
 
@@ -35,3 +40,15 @@ class FuncionarioNovo(CreateView):
         funcionario.user = User.objects.create(username=username)
         funcionario.save()
         return super(FuncionarioNovo, self).form_valid(form)
+
+
+class Render:
+    @staticmethod
+    def render(path: str, params: dict, filename: str):
+        template = get_template(path)
+        html = template.render(params)
+        response = io.BytesIO()
+        pdf = pisa.pisaDocument(io.BytesIO(html.encode("UFT-8")), response)
+
+
+
