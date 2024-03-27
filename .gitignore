@@ -1,5 +1,8 @@
 .idea/
 *.sqlite3
-venv/
+venv    
 gestao_rh/__pycache__/
+gestao_rh.pem
 *.pyc
+media
+static
