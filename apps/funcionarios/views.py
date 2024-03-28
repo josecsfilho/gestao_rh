@@ -1,20 +1,31 @@
 import io
 
 from django.contrib.auth.models import User
-from django.http import HttpResponse
-from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views import View
-from django.views.generic import ListView, UpdateView, DeleteView, CreateView, TemplateView
-from .models import Funcionario
-
+from django.views.generic import (
+    ListView,
+    UpdateView,
+    DeleteView,
+    CreateView
+)
+from django.views.generic.base import View, TemplateView
+from reportlab.pdfgen import canvas
+from django.utils.translation import gettext as _
+from django.http import HttpResponse
 from django.template.loader import get_template
 import xhtml2pdf.pisa as pisa
 
 
+from .models import Funcionario
+
 
 class FuncionariosList(ListView):
     model = Funcionario
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['report_button'] = _("Employee report")
+        return context
 
     def get_queryset(self):
         empresa_logada = self.request.user.funcionario.empresa
@@ -23,12 +34,13 @@ class FuncionariosList(ListView):
 
 class FuncionarioEdit(UpdateView):
     model = Funcionario
-    fields = ['nome', 'departamentos']
+    fields = ['nome', 'departamentos', 'de_ferias']
 
 
 class FuncionarioDelete(DeleteView):
     model = Funcionario
     success_url = reverse_lazy('list_funcionarios')
+
 
 class FuncionarioNovo(CreateView):
     model = Funcionario
@@ -74,15 +86,22 @@ def relatorio_funcionarios(request):
 
     return response
 
+
 class Render:
     @staticmethod
     def render(path: str, params: dict, filename: str):
         template = get_template(path)
         html = template.render(params)
         response = io.BytesIO()
-        pdf = pisa.pisaDocument(io.BytesIO(html.encode("UFT-8")), response)
-
-
+        pdf = pisa.pisaDocument(
+            io.BytesIO(html.encode("UTF-8")), response)
+        if not pdf.err:
+            response = HttpResponse(
+                response.getvalue(), content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment;filename=%s.pdf' % filename
+            return response
+        else:
+            return HttpResponse("Error Rendering PDF", status=400)
 
 
 class Pdf(View):
